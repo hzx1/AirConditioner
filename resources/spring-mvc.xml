@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<context:component-scan base-package="com.wed" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<!-- 日期转换  必须放在<mvc:annotation-driven />前面 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"></bean>
+	<mvc:annotation-driven />
+
+	<mvc:resources mapping="/statics/**" location="/statics/" />
+	<!-- 完成视图的对应 -->
+	<!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
+	<!-- 配置多视图解析器：允许同样的内容数据呈现不同的view -->
+	   <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="favorParameter" value="true" />
+		<property name="defaultContentType" value="text/html" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html;charset=UTF-8" />
+				<entry key="json" value="application/json;charset=UTF-8" />
+				<entry key="xml" value="application/xml;charset=UTF-8" />
+			</map>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/WEB-INF/jsp/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="500000000" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=utf-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=utf-8</value>
+						<value>application/json</value>
+					</list>
+				</property>
+				<property name="features">
+					<list>
+						<!-- Date的日期转换器 -->
+						<value>WriteDateUseDateFormat</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+ 	
+	<!-- 配置拦截器 -->
+<!-- 	 <mvc:interceptors>
+			<mvc:interceptor>
+	    	<mvc:mapping path="/attributedetailController/**" />
+	        <mvc:mapping path="/chargetypeController/**" />
+	        <mvc:mapping path="/departmentController/**" />
+	        <mvc:mapping path="/drugController/**" />
+	        <mvc:mapping path="/employeeController/**" />
+	        <mvc:mapping path="/patienttypeController/**" />
+	        <mvc:mapping path="/registertypeController/**" />
+	        <mvc:mapping path="/useunitController/**" />
+	        <mvc:mapping path="/chargeController/**" />
+	        <mvc:mapping path="/dispensingController/**" />
+	        <mvc:mapping path="/medicalrecordController/**" />
+	        <mvc:mapping path="/medicalrecordtemplateController/**" />
+	        <mvc:mapping path="/prescriptionController/**" />
+	        <mvc:mapping path="/prescriptiontemplateController/**" />
+	        <mvc:mapping path="/patientController/**" />
+	        <mvc:mapping path="/registerController/**" />
+	        <mvc:mapping path="/pegisterController/**" />
+	        <mvc:mapping path="/resourceController/**" />
+	        <mvc:mapping path="/roleController/**" />
+	        <mvc:mapping path="/userinfoController/**" />
+			<bean class="com.configuration.lanjie" />
+		</mvc:interceptor>
+	</mvc:interceptors>  -->
+	
+</beans>
