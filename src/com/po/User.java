@@ -2,7 +2,7 @@ package com.po;
 
 public class User {
 	/*
-	 * 用户表qq
+	 * 用户表qqs
 	 * */
 	private int id;
 	private String name;
